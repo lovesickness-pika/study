@@ -1,0 +1,18 @@
+### spring mvc的请求流程
+
+1.用户发送请求至前端控制器DispatcherServlet(也叫中央处理器).
+2.DispatcherServlet收到请求调用HandlerMapping处理器映射器
+3.处理器映射器找到具体的处理器（可以根据xml配置、注解进行查找），生成处理器对象及处理器拦截器（如果有则生成）一并返回给DispatcherServlet.
+4.DispatcherServlet调用HandlerAdapter处理器适配器。
+5.HandlerAdapter经过适配调用具体的处理器（Controller,也叫后端控制器）。
+6.Controller执行完成返回ModelAndView.
+7.HandlerAdapter将controller执行结果ModelAndView返回给DispatcherServlet.
+8.DisPatcherServlet将ModelAndView传给ViewReslover视图解析器。
+9.ViewReslover解析后返回具体View.
+10.DispatcherServlet根据View进行渲染视图（即将模型数据填充至视图中）。
+11.DispatcherServlet响应用户。
+
+![image-20210820201756441](C:\Users\皮卡丘\AppData\Roaming\Typora\typora-user-images\image-20210820201756441.png)
+
+- springmvc执行流程：DispatcherServlet拦截到用户的请求，调用HandlerMapping找到对应的处理器并生成处理器对象HandlerExecutionChain对象，这个对象中包含了Handleer处理器和拦截器，使用适配器模式匹配合适的HandlerAdapter，再用反射的方式执行具体的Controller方法并返回ModelAndView对象
+

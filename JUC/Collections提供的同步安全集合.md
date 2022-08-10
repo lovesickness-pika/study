@@ -1,0 +1,1 @@
+- Collections为很多集合提供了线程安全的实现方式，就是给各个方法加Synchronized锁

@@ -1,0 +1,4 @@
+Comparable & Comparator
+接口都可以用来实现集合中元素的比较、排序，Comparator位于包java.util下，而Comparable位于包java.lang下，Comparable接口将比较代码嵌入自身类中，而后者在一个独立的类中实现比较。
+像Integer、String等这些基本类型的JAVA封装类都已经实现了Comparable接口，这些类对象本身就支持自比较，直接调用Collections.sort()就可以对集合中元素的排序，无需自己去实现Comparable接口。
+而有些自定义类的List序列，当这个对象不支持自比较或者自比较函数不能满足你的要求时，你可以写一个比较器来完成两个对象之间大小的比较，也就是指定使用Comparator（临时规则排序，也称作专门规则排序），如果不指定Comparator，那么就用自然规则排序，这里的自然顺序就是实现Comparable接口设定的排序方式。

@@ -1,0 +1,15 @@
+### equals与hashcode
+
+
+
+- equals和hashcode都是Object类的public方法，equals方法用于比较两个对象是否相等，hashcode方法为每个对象提供了一个int类型的数据，可以用于比较对象，但不能保证hashcode值相等的对象一定是同一个对象；
+- hashcode在不重写的情况下进行的是等值比较，也就是比较这个值引用的对象在内存中是否是同一个对象，当然由于hashcode实际上是由内存地址进行hash后得到（int类型的hashcode值是无法包含所有的地址，所以要通过hash算法）的，所以也可能出现两个不同对象的hashcode方法返回值相等的情况，不过比较少；.
+
+
+
+#### 为什么重写equals方法要重写hashcode方法
+
+- 其实在hashcode方法的注解上就有写，hashcode方法应该要满足：1）同一个对象多次调用返回相同的值 2）equals比较返回true的对象的hashcode方法返回的值应该相等 3）两个用equals方法返回为false的对象其hashcode值不一定不相等
+
+- 重写了equals方法后说明程序员希望以equals里面的这个规则而不是依靠内存地址的比较来判断两个对象是否相等，比如String类型重写后的equals方法就是以逐位比较字符的方式来比较对象是否相等，而hashcode的作用是在hash表中定位某个对象
+

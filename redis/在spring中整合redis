@@ -1,0 +1,134 @@
+
+
+### 在spring中整合redis
+
+
+
+#### redis.properties
+
+```properties
+#ip
+redis.host=127.0.0.1
+#redis默认端口
+redis.port=6379
+#设置了密码则需要填密码
+redis.password=123456
+#redis建立连接超时时间
+redis.timeout=1000
+
+#redis连接池参数
+#redis最大连接数
+redis.maxTotal=300
+#redis最大激活连接数
+redis.maxActive=200
+#redis最大等待连接数
+redis.maxIdle=200
+#redis最大建立连接等待时间,超时会报异常，-1为无限制
+redis.maxWait
+```
+
+
+
+#### spring-redis.xml
+
+```xml
+<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">	
+    <!-- 最小空闲数 -->
+    <property name="minIdle" value="${redis.minIdle}" />
+    <!-- 最大空闲数 -->
+    <property name="maxIdle" value="${redis.maxIdle}" />
+    <!-- 最大连接数 -->
+    <property name="maxTotal" value="${redis.maxTotal}" />
+    <!-- 最大等待时间 单位毫秒（ms） -->
+    <property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+    <!-- 使用连接时测试连接是否可用 -->
+    <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+</bean>
+
+<!-- redis连接工厂 -->
+<bean id="jedisConnectionFactory" class="org.springfrmework.data.connnection.jedis.JedisConnectionFactory">
+	property name="poolConfig" ref="poolConfig" />
+		<property name="database" value="${redis.database}" />
+		<property name="port" value="${redis.port}" />
+		<property name="hostName" value="${redis.host}" />
+		<property name="password" value="${redis.password}" />
+</bean>
+
+<!-- redisTemlate redis提供的高度集成工具 -->
+<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+	<property name="connectionFactory" ref="jedisConnectionFactory"/>
+</bean> 
+
+```
+
+
+
+#### redisUtil
+
+```java
+package com.background.util;
+
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+
+//提供一个redis通用操作类给外界操作redis数据库
+public interface RedisUtil {
+
+
+    public void remove(String key);
+
+    /**
+     * 批量删除缓存
+     * 使用spring的事务支持
+     * @param keys
+     * @return
+     */
+    @Transactional
+    public void remove(String...keys);
+
+    /**
+     * 批量删除缓存
+     * @param pattern
+     * @return
+     */
+    public void removePattern(String pattern);
+
+    /**
+     * key是否存在
+     * @param key
+     * @return true 存在
+     */
+    public boolean exist(String key);
+
+    /**
+     * 取得key对应的value
+     * @param key
+     * @return
+     */
+    public Object get(String key);
+
+    /**
+     * 添加缓存
+     * @param key
+     * @param value
+     * @return
+     */
+    public boolean set(String key, Object value);
+
+    /**
+     * 添加缓存并设置过期时间
+     * @param key
+     * @param value
+     * @param expireTime
+     * @return
+     */
+    public boolean set(String key, Object value, Long expireTime);
+
+
+}
+```
+
+
+

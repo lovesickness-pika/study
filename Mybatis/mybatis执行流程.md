@@ -1,0 +1,15 @@
+### Mybatis
+
+#### 原理解析
+
+- Configuration对象的结构和xml配置文件的对象基本相同，也就是使用Configuration对xml进行了封装，体现了面向对象的思想，初始化配置文件的信息就是创建Configuration对象，将解析的xml数据封装代Configuration对象中，比如将每个select/update等封装成一个MapperStatement对象存储在Configuration中
+- SqlSession是MyBatis中用于和数据交互的顶级类，通常将它与ThreadLocal绑定，一个会话使用一个SqlSession，并在使用完毕后需要close，它有两个实现类，一般使用DefaultSqlSession，SqlSession中有两个重要的成员，一个是Configuration对象，另一个是Executor
+- Executor是一个接口，用来执行sql语句，在executor中会去获取连接，执行查询等，有三个实现类BatchExecutor，ReuseExecutor，SimpleExecutor，默认使用SimpleExecutor
+
+#### MyBatis的动态代理
+
+##### 解析Mappers标签
+
+- 在进行mybatis初始化时，会解析传入的xml文件，当解析到mappers时
+  - mappers中可以配置mapper.xml配置文件，此时会将它封装为MapperStatement对象，放到Configuration对象的mapperStatements中
+  - mappers中还可以配置接口类，会创建这个接口对应的MapperProxyFactory对象，存入到Configuration的MapperRegistry内的一个hashmap中，key为接口的类对象，value为此接口对应的MapperProxyFactory对象

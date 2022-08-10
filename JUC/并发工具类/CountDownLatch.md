@@ -1,0 +1,4 @@
+### CountDownLatch
+
+- CountDownLatch允许一个线程或多个线程等待其他线程完成操作，用来进行并发流程控制；CountDownLatch其实就是一个计数器，在初始化时初始化计数器的数量，然后每次调用CountDownLatch的CountDown方法都会使得计数器减一，直到为零后，调用了CountDownLatch的await方法的线程会恢复运行
+
